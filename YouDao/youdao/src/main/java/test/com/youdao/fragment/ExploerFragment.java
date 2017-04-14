@@ -13,7 +13,7 @@ import test.com.youdao.R;
 /**
  * Created by DW on 2017/4/12.
  */
-public class ExploerFragment extends Fragment {
+public class ExploerFragment extends BaseFragment {
     private Context mContext;
     
     private View mRootView;

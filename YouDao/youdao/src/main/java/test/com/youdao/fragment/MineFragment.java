@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import io.reactivex.Observable;
+import io.reactivex.plugins.RxJavaPlugins;
 import test.com.youdao.R;
 
 /**
  * Created by DW on 2017/4/12.
  */
-public class MineFragment extends Fragment {
+public class MineFragment extends BaseFragment {
     private Context mContext;
     
     private View mRootView;
