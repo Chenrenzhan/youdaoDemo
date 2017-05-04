@@ -1,9 +1,9 @@
-package test.com.youdao.basic;
+package test.com.youdao.basic.utils;
 
 /**
  * Created by DW on 2017/4/13.
  */
-public abstract class SingleTon<T> {
+public abstract class SingleTonUtils<T> {
     private T mInstance;
     private final static Object syncLock = new Object();
     

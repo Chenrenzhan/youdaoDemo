@@ -8,7 +8,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import test.com.youdao.MainActivity;
-import test.com.youdao.basic.SingleTon;
+import test.com.youdao.basic.utils.SingleTonUtils;
 import test.com.youdao.basic.log.LogToES;
 import test.com.youdao.basic.log.MLog;
 
@@ -19,7 +19,7 @@ import test.com.youdao.basic.log.MLog;
  */
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private Application mApplication;
-    private static CrashHandler mCrashHandler = new SingleTon<CrashHandler>(){
+    private static CrashHandler mCrashHandler = new SingleTonUtils<CrashHandler>(){
         @Override
         public CrashHandler create() {
             return new CrashHandler();
