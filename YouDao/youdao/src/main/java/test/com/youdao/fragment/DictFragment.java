@@ -30,6 +30,8 @@ import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;
+import test.com.youdao.HostState;
+import test.com.youdao.HostStore;
 import test.com.youdao.R;
 import test.com.youdao.basic.http.OnHttpErrorListener;
 import test.com.youdao.basic.http.RequestParam;
@@ -37,9 +39,12 @@ import test.com.youdao.basic.http.RxRetrofit;
 import test.com.youdao.basic.redirect.RedirectAPINotSupportException;
 import test.com.youdao.basic.redirect.RedirectHandler;
 import test.com.youdao.basic.redirect.RedirectParam;
+import test.com.youdao.basic.redux.StateChangedEventArgs;
 import test.com.youdao.basic.rxbus.RxBus;
 import test.com.youdao.basic.rxbus.RxBusAction;
 import test.com.youdao.basic.log.MLog;
+import test.com.youdao.redux.test.ReduxTestModel;
+import test.com.youdao.redux.test.TestAction;
 
 /**
  * Created by DW on 2017/4/12.
@@ -155,7 +160,41 @@ public class DictFragment extends BaseFragment {
                         });
             }
         });
+
+        testRedux();
         
         return mRootView;
+    }
+    
+    private void testRedux(){
+        HostStore.INSTANCE.getObservable()
+                .filter(new Predicate<StateChangedEventArgs<HostState>>() {
+                    @Override
+                    public boolean test(@NonNull StateChangedEventArgs<HostState> eventArgs) throws Exception {
+                        return TestAction.class.equals(eventArgs.action.getClass());
+                    }
+                })
+                .subscribe(new Consumer<StateChangedEventArgs<HostState>>() {
+                    @Override
+                    public void accept(@NonNull StateChangedEventArgs<HostState> eventArgs) throws Exception {
+                        TestAction action = (TestAction) eventArgs.action;
+                        ReduxTestModel stateTestModel = HostStore.INSTANCE.getState().getTestModel(); // 
+                        ReduxTestModel eventTestModel = eventArgs.state.getTestModel();
+                        MLog.debug("chenrenzhan", " action --> " + action + " \n stateTestModel --> " + stateTestModel + " \n eventTestModel --> " + eventTestModel);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+                        
+                    }
+                });
+        mRootView.findViewById(R.id.redux_test).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReduxTestModel testModel = new ReduxTestModel.Builder().setUid(count++).setName("chenrenzhan").build();
+                TestAction action = new TestAction(testModel);
+                HostStore.INSTANCE.dispatch(action);
+            }
+        });
     }
 }
